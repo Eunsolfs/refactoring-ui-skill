@@ -85,6 +85,22 @@ cp -r refactoring-ui-skill/skills/refactoring-ui ~/.claude/skills/   # 个人级
 cp -r refactoring-ui-skill/skills/refactoring-ui .claude/skills/     # 项目级
 ```
 
+### DeepSeek Harness（DSH）
+
+DSH 原生识别 `SKILL.md`，不需要插件包装，把 skill 目录放进它的技能根目录即可：
+
+```bash
+git clone https://github.com/Eunsolfs/refactoring-ui-skill.git .refactoring-ui
+
+# 个人级：所有项目可用（rank 400）
+mkdir -p ~/.dsh/skills && cp -r .refactoring-ui/skills/refactoring-ui ~/.dsh/skills/
+
+# 项目级：仅当前项目生效（rank 100）
+mkdir -p .dsh/skills && cp -r .refactoring-ui/skills/refactoring-ui .dsh/skills/
+```
+
+DSH 按 `<名称>/SKILL.md` 发现技能，改动无需重启会自动刷新；`description` 是模型唯一的触发依据。DSH 用严格 YAML 解析 frontmatter，description 里出现「冒号 + 空格」时必须加引号——本分支已修复（上游 main 的 `Chinese: 页面…` 会让严格解析器报错并静默跳过该技能）。
+
 ### 其他编码助手
 
 插件机制是 Claude Code 专属的，但 Skill 本身不是。它就是一堆 Markdown，而且刻意做成了“一个索引 + 按需加载的引用文件”，任何能读文件的助手都能照着走，告诉它一次就行。

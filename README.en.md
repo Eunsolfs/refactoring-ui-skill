@@ -84,6 +84,22 @@ cp -r refactoring-ui-skill/skills/refactoring-ui ~/.claude/skills/   # personal
 cp -r refactoring-ui-skill/skills/refactoring-ui .claude/skills/     # project
 ```
 
+### DeepSeek Harness (DSH)
+
+DSH discovers `SKILL.md` natively — no plugin wrapper needed; drop the skill directory into one of its skill roots:
+
+```bash
+git clone https://github.com/Eunsolfs/refactoring-ui-skill.git .refactoring-ui
+
+# Personal: available in every project (rank 400)
+mkdir -p ~/.dsh/skills && cp -r .refactoring-ui/skills/refactoring-ui ~/.dsh/skills/
+
+# Project: current project only (rank 100)
+mkdir -p .dsh/skills && cp -r .refactoring-ui/skills/refactoring-ui .dsh/skills/
+```
+
+DSH discovers skills as `<name>/SKILL.md` and refreshes changed roots without a restart; `description` is the only routing signal the model sees. DSH parses frontmatter as strict YAML, so a colon followed by a space in `description` must be quoted — fixed on this branch (upstream `main` makes strict parsers reject and silently skip the skill).
+
 ### Other coding agents
 
 The plugin mechanism belongs to Claude Code, but the Skill itself doesn't. It's a pile of Markdown, deliberately built as "an index plus references loaded on demand" — any agent that can read files can follow it. You just have to tell it once.
